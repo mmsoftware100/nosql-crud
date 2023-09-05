@@ -9,7 +9,7 @@ app.use(express.static('public'))
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
-  res.sendFile(__dirname + '/templates/index.html');
+  // res.sendFile(__dirname + '/templates/index.html');
 });
 app.get('/hello', (req, res) => {
   res.send('Hello World!')
