@@ -129,5 +129,5 @@ async function remove_doc() {
 // console.log("-------");
 // select().catch(console.dir);
 // console.log("-------");
-update().catch(console.dir);
+// update().catch(console.dir);
 //remove_doc().catch(console.dir);
