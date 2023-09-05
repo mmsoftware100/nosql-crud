@@ -1,35 +1,18 @@
-const { MongoClient } = require("mongodb");
+const express = require('express');
+const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
-// Replace the uri string with your connection string.
-const uri = "mongodb://localhost:27017";
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
 
-const client = new MongoClient(uri);
+io.on('connection', (socket) => {
+  console.log('a user connected');
+});
 
-async function run() {
-  try {
-    const database = client.db('crud');
-    const tasks = database.collection('task');
-
-    // Query for a movie that has the title 'Back to the Future'
-    const query = { name: 'Wake up at 5 AM' };
-    const search_tasks = await tasks.find({}); //  findOne(query);
-    const allValues = await search_tasks.toArray();
-    console.dir(allValues);
-    /*
-    while (await search_tasks.hasNext()) {
-        console.log(await search_tasks.next());
-    }
-    */
-
-    // console.log(search_tasks);
-    let today = new Date().toLocaleDateString()
-    let result =  await tasks.insertOne({ name: 'Hello '+ today, status : false });
-    console.log(result);
-
-
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-run().catch(console.dir);
+server.listen(3000, () => {
+  console.log('listening on *:3000');
+});
