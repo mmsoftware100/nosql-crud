@@ -7,6 +7,16 @@ const io = new Server(server);
 // serving static files
 app.use(express.static('public'))
 
+
+// set the view engine to ejs
+app.set('view engine', 'ejs');
+
+
+// index page
+app.get('/ejs', function(req, res) {
+  res.render('pages/index');
+});
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
   // res.sendFile(__dirname + '/templates/index.html');
