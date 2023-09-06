@@ -6,6 +6,7 @@ const { Server } = require("socket.io");
 
 const { MongoClient , ObjectId, ServerApiVersion} = require("mongodb");
 
+var port = process.env.PORT || 5508;
 // Replace the uri string with your connection string.
 // const uri = "mongodb://localhost:27017";
 // const uri = "mongodb+srv://Cluster90592:Sa3pczFDUgEVzEOA@cluster90592.y6zvyrl.mongodb.net/";
@@ -138,8 +139,8 @@ io.on('connection', (socket) => {
   console.log('a user connected');
 });
 
-server.listen(3000, () => {
-  console.log('listening on *:3000');
+server.listen(port, () => {
+  console.log('listening on *:'+port);
 });
 
 
