@@ -31,8 +31,58 @@
       task_items[i].addEventListener('click', (event) => {
           // taskItem.classList.toggle('completed');
           console.log("clicked");
-          console.log(event.target.getAttribute('data-id'));
-          console.log(event.target.getAttribute('data-status'));
+          const _id = event.target.getAttribute('data-id');
+          const status = event.target.getAttribute('data-status');
+          alert(status);
+          const status_update = status == true ? false : true;
+          alert(status_update);
+          //return;
+          // event.target.setAttribute('data-status', status_update);
+          event.target.setAttribute('data-status', status_update);
+
+          const data = {
+            "status" : status_update
+          };
+
+          // need to change data-status also
+          if(status_update == true){
+            // add line through class -> completed
+            event.target.classList.toggle('completed');
+          }
+          else{
+            // remove class -> completed
+            event.target.classList.toggle('completed');
+          }
+          // make ajax call 
+          // Define the URL and request data
+            const url = './api/v1/tasks/' + _id;
+            
+
+            // Create a request object
+            const requestOptions = {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json', // Set the content type to JSON
+              },
+              body: JSON.stringify(data), // Convert the data object to JSON string
+            };
+
+            // Make the POST request
+            fetch(url, requestOptions)
+            .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the response JSON
+            })
+            .then(data => {
+                console.log('Response data:', data);
+                // TODO: add task element
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
         });
     }
 

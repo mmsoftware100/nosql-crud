@@ -19,6 +19,8 @@ app.use(express.static('public'))
 // body parser
 app.use(express.urlencoded({ extended: true }));
 
+// Middleware to parse JSON data in request body
+app.use(express.json());
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -91,6 +93,24 @@ app.post('/submit-task', (req, res) => {
   });
   
 });
+// Define a route handler for PUT requests
+app.put('/api/v1/tasks/:id', (req, res) => {
+  const itemId = req.params.id;
+  const updatedData = req.body;
+  // Your logic to update the item with the provided ID using updatedData
+  // For demonstration purposes, we'll simply send a response
+  console.log("item id " + itemId);
+  console.log(updatedData);
+
+  updateTask(itemId, updatedData)
+  .then(()=>{
+    res.json({ status: true, message: `Updated item with ID ${itemId}`, data : updatedData });
+  })
+  .catch((err) => {
+    res.json({ status: false, message: err, updatedData });
+  });
+  
+});
 
 
 io.on('connection', (socket) => {
@@ -128,5 +148,37 @@ async function selectTasks() {
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
+  }
+}
+async function updateTask(id,obj) {
+  try {
+    console.log("updateTask ");
+    const database = mongoClient.db('crud');
+    const tasks = database.collection('task');
+    // Filter by _id
+    const filter = { _id: new ObjectId(id) };
+    // Set the new data
+    const updateDoc = {
+      $set: obj,
+    };
+    // Update the document
+    const result = await tasks.updateOne(filter, updateDoc);
+
+
+    // Check the result
+    if (result.modifiedCount === 1) {
+      console.log('Document updated successfully');
+    } else {
+      console.log('Document not found or no changes made');
+    }
+  }
+  catch(err){
+    console.log("updateTask->catch err");
+    console.log(err);
+  }
+  finally {
+    // Ensures that the client will close when you finish/error
+    // await client.close();
+    console.log("updateTask->finally");
   }
 }
