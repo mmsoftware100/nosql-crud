@@ -6,6 +6,8 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 // serving static files
 app.use(express.static('public'))
+// body parser
+app.use(express.urlencoded({ extended: true }));
 
 
 // set the view engine to ejs
@@ -36,6 +38,36 @@ app.get('/', (req, res) => {
 app.get('/hello', (req, res) => {
   res.send('Hello World!')
 });
+
+/* tasks */
+app.get('/tasks', function(req, res) {
+  // getting data
+  var task_list = [
+    { _id: "thisIsId", name: 'Sammy', status: false },
+    { _id: "thisIsId2", name: 'Monday', status: true },
+    { _id: "thisIsId3", name: 'Friday', status: false }
+  ];
+  // prepare context to pass template engine
+  const context = {
+    task_list: task_list
+  };
+  // render template using context
+  res.render('pages/task_list', context);
+});
+
+app.get('/new-task-form', function(req, res) {
+  res.render('pages/new_task_form');
+});
+app.post('/submit-task', (req, res) => {
+  const name = req.body.name;
+  // const email = req.body.email;
+  console.log(req.body);
+
+  // Do something with the submitted data (e.g., store it in a database).
+
+  res.send(`Name: ${name}`);
+});
+
 
 io.on('connection', (socket) => {
   console.log('a user connected');
