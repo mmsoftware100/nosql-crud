@@ -55,7 +55,8 @@ app.get('/ejs', function(req, res) {
 });
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.render('pages/home');
+  // res.send('Hello World!')
   // res.sendFile(__dirname + '/templates/index.html');
 });
 app.get('/hello', (req, res) => {
