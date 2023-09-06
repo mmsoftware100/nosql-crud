@@ -1,5 +1,22 @@
 # Mongo in the House
 
+## CRUD in NoSQL
+
+
+```bash
+# create project folder
+mkdir project
+# change directory to project folder
+cd project
+# initialize npm
+npm init
+# install required library
+npm install express
+npm install socket.io
+npm install ejs
+npm install mongodb
+npm install dotenv
+```
 
 mongodb://localhost:27017/mydbname
 
