@@ -3,6 +3,7 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+require('dotenv').config()
 
 const { MongoClient , ObjectId, ServerApiVersion} = require("mongodb");
 
@@ -10,7 +11,7 @@ var port = process.env.PORT || 5508;
 // Replace the uri string with your connection string.
 // const uri = "mongodb://localhost:27017";
 // const uri = "mongodb+srv://Cluster90592:Sa3pczFDUgEVzEOA@cluster90592.y6zvyrl.mongodb.net/";
-const uri = "mongodb+srv://Cluster90592:Sa3pczFDUgEVzEOA@cluster90592.y6zvyrl.mongodb.net/?retryWrites=true&w=majority";
+const uri = process.env.DB_URL || "mongodb://localhost:27017" ; // "mongodb+srv://Cluster90592:Sa3pczFDUgEVzEOA@cluster90592.y6zvyrl.mongodb.net/?retryWrites=true&w=majority";
 
 // const mongoClient = new MongoClient(uri);
 const mongoClient = new MongoClient(uri, {
