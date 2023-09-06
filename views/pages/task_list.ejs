@@ -33,9 +33,15 @@
           console.log("clicked");
           const _id = event.target.getAttribute('data-id');
           const status = event.target.getAttribute('data-status');
-          alert(status);
-          const status_update = status == true ? false : true;
-          alert(status_update);
+          //alert(status);
+          if(status == "true"){
+            //alert("original is true");
+          }
+          else{
+            //alert("origin is not trur");
+          }
+          let status_update = status == "true" ? false : true;
+          //alert(status_update);
           //return;
           // event.target.setAttribute('data-status', status_update);
           event.target.setAttribute('data-status', status_update);
