@@ -57,12 +57,18 @@ app.get('/tasks', function(req, res) {
     { _id: "thisIsId2", name: 'Monday', status: true },
     { _id: "thisIsId3", name: 'Friday', status: false }
   ];
+  task_list = selectTasks().then((task_list) => {
+    const context = {
+      task_list: task_list
+    };
+    // render template using context
+    res.render('pages/task_list', context);
+  }).catch((err) => {
+    console.log(err);
+    res.send("Something went wrong ");
+  });
   // prepare context to pass template engine
-  const context = {
-    task_list: task_list
-  };
-  // render template using context
-  res.render('pages/task_list', context);
+  
 });
 
 app.get('/new-task-form', function(req, res) {
@@ -104,6 +110,21 @@ async function insertTask(obj) {
     let today = new Date().toLocaleDateString()
     let result =  await tasks.insertOne({ ...obj, status : false });
     console.log(result);
+  } finally {
+    // Ensures that the client will close when you finish/error
+    // await client.close();
+  }
+}
+async function selectTasks() {
+  try {
+    const database = mongoClient.db('crud');
+    const tasks = database.collection('task');
+    // Query for a movie that has the title 'Back to the Future'
+    const query = { name: 'Wake up at 5 AM' };
+    const search_tasks = await tasks.find({}).sort({ _id: -1 }); //  findOne(query);
+    const allValues = await search_tasks.toArray();
+    console.dir(allValues);
+    return allValues;
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();

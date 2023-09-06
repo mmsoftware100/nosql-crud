@@ -1,7 +1,40 @@
-<h2>Task List</h2>
+<style>
+    .task-item {
+      cursor: pointer;
+      padding: 8px;
+    }
+    .task-item:hover {
+      cursor: pointer;
+      padding: 8px;
+      background-color: gray;
+      color: white;
+      border-radius: 8px;
+    }
+    .completed{
+        text-decoration: line-through;
+    }
+  </style>
+<h2>Task List</h2>0
 <ul>
-    <li>Task One</li>
-    <li>Task Two</li>
-    <li>Task Task Three</li>
+    <% task_list.forEach(function(task) { %>
+        <li data-id="<%= task._id %>" data-status="<%= task.status %>" class="task-item <%= task.status == true ? 'completed' : '' %>">
+           <%= task.name %> | <%= task.status %> | <%= task.status == "true" ? 'completed' : 'inactive' %>
+        </li>
+      <% }); %>
 </ul>
 <a href="/new-task-form">Add New</a>
+
+<script>
+    // Get all elements with a specific class name
+    const task_items = document.getElementsByClassName('task-item');
+    for (let i = 0; i < task_items.length; i++) {
+      task_items[i].addEventListener('click', (event) => {
+          // taskItem.classList.toggle('completed');
+          console.log("clicked");
+          console.log(event.target.getAttribute('data-id'));
+          console.log(event.target.getAttribute('data-status'));
+        });
+    }
+
+    
+</script>
