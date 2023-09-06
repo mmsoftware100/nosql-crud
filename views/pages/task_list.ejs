@@ -1,7 +1,23 @@
 <style>
+    body{
+      display: flex;
+      justify-content: center;
+    }
+    section{
+      flex: 1;
+      max-width: 500px;
+      min-width: 300px;
+      width: 100%;
+      height: 100vh;
+      overflow: scroll;
+      background-color: wheat;
+      padding: 8px;
+    }
     .task-item {
       cursor: pointer;
       padding: 8px;
+      display: flex;
+      align-items: center;
     }
     .task-item:hover {
       cursor: pointer;
@@ -13,18 +29,40 @@
     .completed{
         text-decoration: line-through;
     }
+    .task-name{
+      flex: 3;
+    }
+    .task-delete{
+      color: red;
+    }
   </style>
-<h2>Task List</h2>0
-<ul>
-    <% task_list.forEach(function(task) { %>
-        <li data-id="<%= task._id %>" data-status="<%= task.status %>" class="task-item <%= task.status == true ? 'completed' : '' %>">
-           <%= task.name %> | <%= task.status %> | <%= task.status == "true" ? 'completed' : 'inactive' %>
-        </li>
-      <% }); %>
-</ul>
-<a href="/new-task-form">Add New</a>
+
+  <section>
+
+    <h2>Task List</h2>
+    <form action="/submit-task" method="POST">
+      <input type="text" name="name" required placeholder="New Task" id="task-input"/>
+      <input type="submit" value="Insert" />
+    </form>
+    
+        <% task_list.forEach(function(task) { %>
+            <div data-id="<%= task._id %>" data-status="<%= task.status %>" class="task-item <%= task.status == true ? 'completed' : '' %>">
+              
+              <span class="task-name" ><%= task.name %></span>
+               <form action="/delete-task" method="POST" style="display: inline;" class="task-delete">
+                <input type="hidden" name="id" value="<%= task._id %>" required />
+                <input type="submit" value="x" />
+              </form>
+            </div>
+          <% }); %>
+  </section>
+  
 
 <script>
+
+    window.onload = function() {
+      document.getElementById('task-input').focus();
+    };
     // Get all elements with a specific class name
     const task_items = document.getElementsByClassName('task-item');
     for (let i = 0; i < task_items.length; i++) {

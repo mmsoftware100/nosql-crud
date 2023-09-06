@@ -7,8 +7,8 @@ const { Server } = require("socket.io");
 const { MongoClient , ObjectId} = require("mongodb");
 
 // Replace the uri string with your connection string.
-const uri = "mongodb://localhost:27017";
-
+// const uri = "mongodb://localhost:27017";
+const uri = "mongodb+srv://Cluster90592:Sa3pczFDUgEVzEOA@cluster90592.y6zvyrl.mongodb.net/";
 const mongoClient = new MongoClient(uri);
 // var ObjectId = require('mongodb').ObjectID;
 
@@ -85,6 +85,17 @@ app.post('/submit-task', (req, res) => {
   // Do something with the submitted data (e.g., store it in a database).
   // redirect to listing page
   insertTask(req.body).then(()=>{
+    // res.send(`Name: ${name}`);
+    res.redirect('/tasks');
+  }).catch((err)=>{
+    console.log(err);
+    res.send("Something went wrong ");
+  });
+  
+});
+app.post('/delete-task', (req, res) => {
+  const id = req.body.id;
+  deleteTask(id).then(()=>{
     // res.send(`Name: ${name}`);
     res.redirect('/tasks');
   }).catch((err)=>{
@@ -180,5 +191,31 @@ async function updateTask(id,obj) {
     // Ensures that the client will close when you finish/error
     // await client.close();
     console.log("updateTask->finally");
+  }
+}
+
+async function deleteTask(id) {
+  try {
+    const database = mongoClient.db('crud');
+    const tasks = database.collection('task');
+
+    const filter = { _id: new ObjectId(id) };
+
+    // Delete the document
+    const result = await tasks.deleteOne(filter);
+
+    // Check the result
+    if (result.deletedCount === 1) {
+      console.log('Document deleted successfully');
+    } else {
+      console.log('Document not found or no documents deleted');
+    }
+  } catch(err) {
+    console.log(err);
+    // Ensures that the client will close when you finish/error
+    // await client.close();
+  } finally {
+    // Ensures that the client will close when you finish/error
+    // await client.close();
   }
 }
